@@ -3,34 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Cloudflare Turnstile Demo</title>
     <script
-  src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback"
-  defer
-></script>
+        src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback"
+        defer
+    ></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 500px;
+            margin: 20px auto;
+            text-align: center;
+            display: none;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        #myWidget {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+        }
+        .success-message {
+            color: #28a745;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-
-    </div>
     <div>
-        <h1>
-            Welcome
-        </h1>
+        <h1>Welcome</h1>
+        <div id="myWidget"></div>
+        <div id="status">Please complete the verification above</div>
     </div>
+    
+    <div class="container">
+        <h2>🎉 Verification Complete!</h2>
+        <p>You have successfully completed the Cloudflare Turnstile verification.</p>
+        <div class="success-message">Access granted!</div>
+    </div>
+
+    <script>
+        window.onloadTurnstileCallback = function () {
+            turnstile.render("#myWidget", {
+                sitekey: "0x4AAAAAABmboj9Myyw7zLyd",
+                callback: function (token) {
+                    console.log(`Challenge Success ${token}`);
+                    
+                    // Update status
+                    document.getElementById("status").innerHTML = "✅ Verification successful!";
+                    document.getElementById("status").style.color = "#28a745";
+                    
+                    // Show the protected content after 2 seconds
+                    setTimeout(() => {
+                        document.querySelector(".container").style.display = "block";
+                        document.getElementById("myWidget").style.display = "flex";
+                    }, 2000);
+                },
+                "error-callback": function(error) {
+                    console.log("Turnstile error:", error);
+                    document.getElementById("status").innerHTML = "❌ Verification failed. Please try again.";
+                    document.getElementById("status").style.color = "#dc3545";
+                }
+            });
+        };
+    </script>
 </body>
-<script>
-    window.onloadTurnstileCallback = function () {
-  turnstile.render("#myWidget", {
-    sitekey: "0x4AAAAAABmboj9Myyw7zLyd",
-    callback: function (token) {
-      console.log(`Challenge Success ${token}`);
-      setTimeout(()=>{
-        document.querySelector(".container").style.display="flex";
-        document.getElementById("myWidget").style.display="flex";
-      },2000)
-    },
-  });
-};
-</script>
 </html>
