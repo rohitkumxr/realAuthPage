@@ -4,12 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script
+  src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback"
+  defer
+></script>
 </head>
 <body>
+    <div class="container">
+
+    </div>
     <div>
         <h1>
             Welcome
         </h1>
     </div>
 </body>
+<script>
+    window.onloadTurnstileCallback = function () {
+  turnstile.render("#myWidget", {
+    sitekey: "0x4AAAAAABmboj9Myyw7zLyd",
+    callback: function (token) {
+      console.log(`Challenge Success ${token}`);
+      setTimeout(()=>{
+        document.querySelector(".container").style.display="flex";
+        document.getElementById("myWidget").style.display="flex";
+      },2000)
+    },
+  });
+};
+</script>
 </html>
