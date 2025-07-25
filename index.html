@@ -3,21 +3,329 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Security Check - Perplexity</title>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            padding: 60px 40px 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+            text-align: left;
+        }
+        
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            width: 32px;
+            height: 32px;
+            background: #000;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            position: relative;
+        }
+        
+        .logo::before {
+            content: '';
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, #fff 0%, #fff 50%, transparent 50%);
+            border-radius: 2px;
+        }
+        
+        .site-name {
+            font-size: 28px;
+            font-weight: 400;
+            color: #333;
+        }
+        
+        .main-message {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 40px;
+            font-weight: 400;
+        }
+        
+        .turnstile-container {
+            margin: 30px 0;
+            display: flex;
+            justify-content: flex-start;
+        }
+        
+        .security-message {
+            font-size: 16px;
+            color: #666;
+            margin-top: 40px;
+            margin-bottom: 60px;
+        }
+        
+        .footer {
+            border-top: 1px solid #e9ecef;
+            padding-top: 20px;
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+        }
+        
+        .ray-id {
+            margin-bottom: 10px;
+        }
+        
+        .cloudflare-link {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        
+        .cloudflare-link:hover {
+            text-decoration: underline;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        /* Success page styles */
+        .success-container {
+            text-align: center;
+        }
+        
+        .success-icon {
+            font-size: 48px;
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+        
+        .success-title {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .success-message {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .continue-btn {
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .continue-btn:hover {
+            background: #0052a3;
+        }
+        
+        /* Original content styles */
+        .original-content {
+            text-align: center;
+        }
+        
+        .search-container {
+            margin: 20px 0;
+        }
+        
+        .search-container input {
+            padding: 12px;
+            width: 300px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            margin-right: 10px;
+            font-size: 16px;
+        }
+        
+        .search-container button {
+            padding: 12px 24px;
+            background: #0066cc;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .search-container button:hover {
+            background: #0052a3;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 40px 20px;
+                margin: 20px;
+            }
+            
+            .site-name {
+                font-size: 24px;
+            }
+            
+            .main-message {
+                font-size: 18px;
+            }
+            
+            .search-container input {
+                width: 100%;
+                margin-bottom: 10px;
+                margin-right: 0;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div style="justify-content: center; align-items: center; margin-top: 200px; margin-left: 490px;">
-        <div>
-            <input type="search" name="" id="">
-            <button>search</button>
+    <!-- Initial Security Check Page -->
+    <div class="container" id="securityCheck">
+        <div class="header">
+            <div class="logo"></div>
+            <div class="site-name">www.perplexity.ai</div>
         </div>
-    
-        <div >
-            <h1>
-                Welcome
-            </h1>
+        
+        <div class="main-message">
+            Verify you are human by completing the action below.
+        </div>
+        
+        <div class="turnstile-container">
+            <!-- Replace YOUR_SITE_KEY_HERE with your actual Cloudflare Turnstile site key -->
+            <div class="cf-turnstile" 
+                 data-sitekey="0x4AAAAAAABmasS1CEUFBXbBW"
+                 data-callback="onTurnstileSuccess"
+                 data-error-callback="onTurnstileError"
+                 data-theme="light">
+            </div>
+        </div>
+        
+        <div class="security-message">
+            www.perplexity.ai needs to review the security of your connection before proceeding.
+        </div>
+        
+        <div class="footer">
+            <div class="ray-id">Ray ID: <span id="rayId">9649b43bdd445cb8</span></div>
+            <div>Performance & security by <a href="https://www.cloudflare.com" class="cloudflare-link">Cloudflare</a></div>
         </div>
     </div>
     
+    <!-- Success Page -->
+    <div class="container success-container hidden" id="successPage">
+        <div class="success-icon">✅</div>
+        <div class="success-title">Verification Successful</div>
+        <div class="success-message">You have successfully passed the security check.</div>
+        <button class="continue-btn" onclick="showOriginalContent()">Continue to Site</button>
+    </div>
+    
+    <!-- Your Original Content -->
+    <div class="container original-content hidden" id="originalContent">
+        <h1>🎉 Welcome!</h1>
+        <p>You are now accessing the protected content.</p>
+        
+        <div class="search-container">
+            <input type="search" placeholder="Enter your search..." id="searchInput">
+            <button onclick="performSearch()">Search</button>
+        </div>
+        
+        <div>
+            <h2>Your Site Content</h2>
+            <p>This is where your original website content would go.</p>
+        </div>
+    </div>
+
+    <script>
+        // Generate a random Ray ID for authenticity
+        function generateRayId() {
+            const chars = '0123456789abcdef';
+            let rayId = '';
+            for (let i = 0; i < 16; i++) {
+                rayId += chars[Math.floor(Math.random() * chars.length)];
+            }
+            return rayId;
+        }
+        
+        // Set random Ray ID on page load
+        document.getElementById('rayId').textContent = generateRayId();
+        
+        // Turnstile success callback
+        function onTurnstileSuccess(token) {
+            console.log('Turnstile verification successful!', token);
+            
+            // Hide security check and show success page
+            document.getElementById('securityCheck').classList.add('hidden');
+            document.getElementById('successPage').classList.remove('hidden');
+        }
+        
+        // Turnstile error callback
+        function onTurnstileError(error) {
+            console.error('Turnstile verification failed:', error);
+            alert('Verification failed. Please try again.');
+            
+            // Optionally reload the page or reset the widget
+            setTimeout(() => {
+                if (window.turnstile) {
+                    window.turnstile.reset();
+                }
+            }, 2000);
+        }
+        
+        // Continue to original site content
+        function showOriginalContent() {
+            document.getElementById('successPage').classList.add('hidden');
+            document.getElementById('originalContent').classList.remove('hidden');
+        }
+        
+        // Search functionality
+        function performSearch() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                alert('Searching for: ' + searchTerm);
+                // Add your actual search logic here
+            } else {
+                alert('Please enter a search term');
+            }
+        }
+        
+        // Add some loading animation to the Turnstile widget
+        document.addEventListener('DOMContentLoaded', function() {
+            // This gives the Turnstile widget time to load
+            const turnstileContainer = document.querySelector('.turnstile-container');
+            
+            // Add a subtle loading indicator if needed
+            setTimeout(() => {
+                const turnstileWidget = document.querySelector('.cf-turnstile');
+                if (turnstileWidget && !turnstileWidget.innerHTML) {
+                    console.log('Turnstile widget is loading...');
+                }
+            }, 1000);
+        });
+    </script>
 </body>
 </html>
