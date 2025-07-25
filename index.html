@@ -1,51 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Human Verification</title>
-  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
 </head>
 <body>
-  <h2>🔐 Please verify you are human</h2>
-
-  <div class="cf-turnstile"
-       data-sitekey="0x4AAAAAAABmasS1CEUFBXbBW"
-       data-callback="onSuccess">
-  </div>
-
-  <div id="result" style="margin-top: 20px; color: green;"></div>
-
-  <script>
-    let token = null;
-
-    function onSuccess(t) {
-      token = t;
-      document.getElementById("result").textContent = "Verifying...";
-
-      fetch("https://your-backend-url.onrender.com/verify", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          "cf-turnstile-response": token
-        })
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          document.getElementById("result").textContent = "✅ Verified! Redirecting...";
-          setTimeout(() => {
-            window.location.href = "home.html";  // ⬅️ redirect here
-          }, 1000);
-        } else {
-          document.getElementById("result").textContent = "❌ Verification failed.";
-        }
-      })
-      .catch(err => {
-        console.error(err);
-        document.getElementById("result").textContent = "❌ Network error.";
-      });
-    }
-  </script>
+    <div>
+        <h1>
+            Welcome
+        </h1>
+    </div>
 </body>
 </html>
